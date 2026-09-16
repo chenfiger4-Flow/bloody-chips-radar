@@ -333,7 +333,7 @@ def build_telegram(p):
     L.append("\n<i>阈值未经历史检验，仅作观察提醒。买入需另符合风险预算。</i>")
     return "\n".join(L)
 
-def send_tg(text):
+def send_telegram(text):
     tok, cid = os.getenv("TELEGRAM_BOT_TOKEN"), os.getenv("TELEGRAM_CHAT_ID")
     if not tok or not cid:
         print(text); return
