@@ -62,6 +62,31 @@ def fetch_coingecko(coin_id):
 
 CG_MAP = {"BTC-USD": "bitcoin", "HYPE32196-USD": "hyperliquid"}
 
+def fetch_hyperliquid(coin, days=400):
+    """Hyperliquid 官方 API 日线 K（永续合约，真实 OHLC + 成交量，无需密钥）。
+    自动丢弃当天未走完的 K 线，避免运行时刻的半根 K 造成假缩量。"""
+    try:
+        end = int(time.time() * 1000); start = end - days * 86400 * 1000
+        r = requests.post("https://api.hyperliquid.xyz/info",
+                          json={"type": "candleSnapshot",
+                                "req": {"coin": coin, "interval": "1d", "startTime": start, "endTime": end}},
+                          timeout=20)
+        j = r.json()
+        if not isinstance(j, list) or len(j) < 30:
+            return None, None
+        df = pd.DataFrame(j)
+        df.index = pd.to_datetime(df["t"].astype("int64"), unit="ms").normalize()
+        df = df.rename(columns={"o": "Open", "h": "High", "l": "Low", "c": "Close", "v": "Volume"})
+        df = df[["Open", "High", "Low", "Close", "Volume"]].astype(float)
+        df = df[~df.index.duplicated(keep="last")].dropna()
+        today_utc = pd.Timestamp(NOW.date())
+        df = df[df.index < today_utc]          # 丢掉今天未收盘的 K
+        return (df, "hyperliquid") if len(df) > 30 else (None, None)
+    except Exception:
+        return None, None
+
+HL_MAP = {"HYPE32196-USD": "HYPE"}   # 原生交易所优先
+
 def fetch_fng():
     try:
         j = requests.get("https://api.alternative.me/fng/?limit=8", timeout=15).json()["data"]
@@ -201,7 +226,11 @@ def run():
     cache = {}
     def get(ticker):
         if ticker in cache: return cache[ticker]
-        df, src = fetch_yf(ticker)
+        df, src = None, None
+        if ticker in HL_MAP:                       # HYPE：先走 Hyperliquid 原生源
+            df, src = fetch_hyperliquid(HL_MAP[ticker])
+        if df is None:
+            df, src = fetch_yf(ticker)
         if df is None and ticker in CG_MAP:
             df, src = fetch_coingecko(CG_MAP[ticker])
         cache[ticker] = (df, src); return cache[ticker]
@@ -334,12 +363,12 @@ def build_telegram(p):
     return "\n".join(L)
 
 def send_telegram(text):
-    tok, cid = os.getenv("TELEGRAM_BOT_TOKEN"), os.getenv("TELEGRAM_CHAT_ID")
-    if not tok or not cid:
-        print(text); return
-    requests.post(f"https://api.telegram.org/bot{tok}/sendMessage",
-                  json={"chat_id": cid, "text": text, "parse_mode": "HTML",
-                        "disable_web_page_preview": True}, timeout=20)
+    tok, chat = os.environ.get("TELEGRAM_BOT_TOKEN"), os.environ.get("TELEGRAM_CHAT_ID")
+    if not tok or not chat:
+        print("[warn] 未配置 Telegram secrets，跳过推送"); return
+    for i in range(0, len(text), 3900):
+        requests.post(f"https://api.telegram.org/bot{tok}/sendMessage",
+                      json={"chat_id": chat, "text": text[i:i+3900], "parse_mode": "HTML", "disable_web_page_preview": True}, timeout=20)
 
 def build_html(p):
     color = {"S0": "bg-gray-100", "S1": "bg-yellow-100", "S2": "bg-orange-100", "S3": "bg-amber-100",
