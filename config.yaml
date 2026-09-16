@@ -1,0 +1,49 @@
+# ===== 观察池 =====
+# type: etf / mega / newlisting / crypto_major / crypto_alt
+# bench: 相对强弱基准
+# dd_trigger: 距60日高点回撤多少进入 S1（压力观察）
+# vol_sc: 判定 SC（抛售高潮）候选所需的最低量比
+# 注意：所有阈值均未经历史检验，仅作观察提醒。
+
+watchlist:
+  - {ticker: SPY,   name: S&P500 ETF,   type: etf,        bench: null,     dd_trigger: 0.08, vol_sc: 2.0, cluster: us_beta}
+  - {ticker: QQQ,   name: Nasdaq100 ETF,type: etf,        bench: SPY,      dd_trigger: 0.10, vol_sc: 2.0, cluster: us_beta}
+  - {ticker: AAPL,  name: Apple,        type: mega,       bench: QQQ,      dd_trigger: 0.12, vol_sc: 2.0, cluster: us_beta}
+  - {ticker: MSFT,  name: Microsoft,    type: mega,       bench: QQQ,      dd_trigger: 0.12, vol_sc: 2.0, cluster: us_beta}
+  - {ticker: NVDA,  name: Nvidia,       type: mega,       bench: QQQ,      dd_trigger: 0.15, vol_sc: 2.0, cluster: us_beta}
+  - {ticker: AMZN,  name: Amazon,       type: mega,       bench: QQQ,      dd_trigger: 0.12, vol_sc: 2.0, cluster: us_beta}
+  - {ticker: GOOGL, name: Alphabet,     type: mega,       bench: QQQ,      dd_trigger: 0.12, vol_sc: 2.0, cluster: us_beta}
+  - {ticker: META,  name: Meta,         type: mega,       bench: QQQ,      dd_trigger: 0.15, vol_sc: 2.0, cluster: us_beta}
+  - {ticker: TSLA,  name: Tesla,        type: mega,       bench: QQQ,      dd_trigger: 0.20, vol_sc: 2.0, cluster: us_beta}
+  - {ticker: SPCX,  name: SpaceX,       type: newlisting, bench: QQQ,      dd_trigger: 0.20, vol_sc: 2.5, cluster: us_beta}
+  - {ticker: CRCL,  name: Circle,       type: newlisting, bench: QQQ,      dd_trigger: 0.20, vol_sc: 2.5, cluster: crypto_beta}
+  - {ticker: BTC-USD, name: Bitcoin,    type: crypto_major, bench: null,   dd_trigger: 0.15, vol_sc: 1.8, cluster: crypto_beta}
+  - {ticker: HYPE32196-USD, name: Hyperliquid, type: crypto_alt, bench: BTC-USD, dd_trigger: 0.25, vol_sc: 1.8, cluster: crypto_beta}
+
+# ===== 宏观代理 =====
+macro:
+  - {ticker: ^VIX,     name: VIX}
+  - {ticker: ^TNX,     name: US10Y}
+  - {ticker: DX-Y.NYB, name: DXY}
+  - {ticker: SMH,      name: 半导体ETF}
+
+# ===== 预写失效条件（恐慌时只回答“命中几条”，不临场找理由）=====
+# 这些是初始版本，你必须按自己的理解逐条改写。
+failure_conditions:
+  SPY:   ["ISM制造业+服务业同时跌破50且连续两月", "高收益债利差快速走阔>150bp/月"]
+  QQQ:   ["Mag7 资本开支指引集体下修", "10Y 收益率快速上破 5%"]
+  AAPL:  ["iPhone 收入连续两季同比下滑>5%", "服务业务增速跌破 8%", "中国区收入同比下滑>15%"]
+  MSFT:  ["Azure 增速跌破 25%", "AI 资本开支无法转化为云收入增长（连续两季）"]
+  NVDA:  ["数据中心收入环比转负", "主要客户公开宣布大幅削减 GPU 订单", "毛利率跌破 65%"]
+  AMZN:  ["AWS 增速跌破 12%", "自由现金流连续两季转负"]
+  GOOGL: ["搜索收入同比负增长", "反垄断判决强制拆分核心业务"]
+  META:  ["日活用户环比下滑", "Reality Labs 亏损扩大且资本开支不减", "广告收入增速跌破 8%"]
+  TSLA:  ["汽车毛利率（不含碳积分）跌破 10%", "交付量连续两季同比下滑>10%"]
+  SPCX:  ["Starlink 用户增长停滞", "锁定期解禁前后10个交易日禁止新开仓", "重大发射事故导致停飞>3个月"]
+  CRCL:  ["USDC 市值持续下滑>20%", "利息收入依赖：联储降息>100bp 且未找到替代收入", "稳定币立法重大不利变化"]
+  BTC-USD: ["现货 ETF 连续 4 周净流出", "美国政策转向明确打压", "稳定币总市值持续萎缩>15%"]
+  HYPE32196-USD: ["回购机制停止或大幅缩减", "交易量份额被竞争对手持续侵蚀", "重大安全事件或监管封禁"]
+
+# ===== 通知 =====
+notify:
+  always_send_brief: true      # 每次运行都发简报（false = 仅状态变化时发）
