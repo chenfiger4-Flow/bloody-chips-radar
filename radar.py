@@ -333,13 +333,13 @@ def build_telegram(p):
     L.append("\n<i>阈值未经历史检验，仅作观察提醒。买入需另符合风险预算。</i>")
     return "\n".join(L)
 
-def send_telegram(text):
-    tok, chat = os.environ.get("TELEGRAM_BOT_TOKEN"), os.environ.get("TELEGRAM_CHAT_ID")
-    if not tok or not chat:
-        print("[warn] 未配置 Telegram secrets，跳过推送"); return
-    for i in range(0, len(text), 3900):
-        requests.post(f"https://api.telegram.org/bot{tok}/sendMessage",
-                      json={"chat_id": chat, "text": text[i:i+3900], "parse_mode": "HTML", "disable_web_page_preview": True}, timeout=20)
+def send_tg(text):
+    tok, cid = os.getenv("TELEGRAM_BOT_TOKEN"), os.getenv("TELEGRAM_CHAT_ID")
+    if not tok or not cid:
+        print(text); return
+    requests.post(f"https://api.telegram.org/bot{tok}/sendMessage",
+                  json={"chat_id": cid, "text": text, "parse_mode": "HTML",
+                        "disable_web_page_preview": True}, timeout=20)
 
 def build_html(p):
     color = {"S0": "bg-gray-100", "S1": "bg-yellow-100", "S2": "bg-orange-100", "S3": "bg-amber-100",
