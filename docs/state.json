@@ -1,6 +1,6 @@
 {
- "run_utc": "2026-09-16T03:15:37.229027+00:00",
- "run_bjt": "2026-09-16 11:15",
+ "run_utc": "2026-09-16T04:03:50.074987+00:00",
+ "run_bjt": "2026-09-16 12:03",
  "mode": "all",
  "macro": {
   "VIX": {
@@ -38,13 +38,13 @@
  "funding": {
   "BTC": {
    "funding_8h": 1.25e-05,
-   "oi": 36128.4626,
-   "mark": 75948.0
+   "oi": 36087.49218,
+   "mark": 75853.6
   },
   "HYPE": {
    "funding_8h": 1.25e-05,
-   "oi": 20497861.560000002,
-   "mark": 77.7
+   "oi": 20487391.42000001,
+   "mark": 77.517
   }
  },
  "rows": [
@@ -243,8 +243,8 @@
    "sc_low": null,
    "sc_high": null,
    "trade": null,
-   "prev_state": "S0",
-   "changed": true
+   "prev_state": "S1",
+   "changed": false
   },
   {
    "ticker": "GOOGL",
@@ -420,12 +420,12 @@
    "cluster": "crypto_beta",
    "date": "2026-09-16",
    "source": "yfinance",
-   "close": 75923.37,
-   "chg1d": -2.87,
+   "close": 75812.07,
+   "chg1d": -3.01,
    "vol_ratio": 1.41,
-   "upper_shadow": 14.0,
-   "dd60": -7.7,
-   "ext_ema5": -1.5,
+   "upper_shadow": 33.0,
+   "dd60": -7.8,
+   "ext_ema5": -1.6,
    "ema_bull": false,
    "above_ema20": false,
    "rs5": null,
@@ -453,16 +453,16 @@
    "cluster": "crypto_beta",
    "date": "2026-09-16",
    "source": "yfinance",
-   "close": 77.69,
-   "chg1d": -3.19,
+   "close": 77.5,
+   "chg1d": -3.43,
    "vol_ratio": 0.79,
-   "upper_shadow": 1.0,
-   "dd60": -13.3,
-   "ext_ema5": -1.9,
+   "upper_shadow": 29.0,
+   "dd60": -13.5,
+   "ext_ema5": -2.0,
    "ema_bull": false,
    "above_ema20": false,
-   "rs5": -0.14,
-   "rs20": -1.85,
+   "rs5": -0.24,
+   "rs20": -1.94,
    "bars": 364,
    "failure_conditions": [
     "回购机制停止或大幅缩减",
