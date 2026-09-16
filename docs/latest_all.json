@@ -1,11 +1,11 @@
 {
- "run_utc": "2026-09-16T09:13:13.559968+00:00",
- "run_bjt": "2026-09-16 17:13",
+ "run_utc": "2026-09-16T09:37:26.286706+00:00",
+ "run_bjt": "2026-09-16 17:37",
  "mode": "all",
  "macro": {
   "VIX": {
-   "value": 16.99,
-   "chg5d": 3.22,
+   "value": 17.09,
+   "chg5d": 3.83,
    "above_ema20": true,
    "date": "2026-09-16"
   },
@@ -16,8 +16,8 @@
    "date": "2026-09-15"
   },
   "DXY": {
-   "value": 99.66,
-   "chg5d": 0.9,
+   "value": 99.65,
+   "chg5d": 0.89,
    "above_ema20": true,
    "date": "2026-09-16"
   },
@@ -37,14 +37,14 @@
  },
  "funding": {
   "BTC": {
-   "funding_8h": 1.25e-05,
-   "oi": 36116.60806,
-   "mark": 75775.0
+   "funding_8h": 1.14612e-05,
+   "oi": 36161.01146,
+   "mark": 75897.0
   },
   "HYPE": {
    "funding_8h": 1.25e-05,
-   "oi": 20392167.520000007,
-   "mark": 77.7158
+   "oi": 20384417.68000001,
+   "mark": 77.683
   }
  },
  "rows": [
@@ -456,18 +456,18 @@
    "type": "crypto_alt",
    "cluster": "crypto_beta",
    "date": "2026-09-15",
-   "source": "yfinance",
-   "close": 76.92,
-   "chg1d": -4.16,
-   "vol_ratio": 0.79,
-   "upper_shadow": 72.0,
-   "dd60": -14.1,
+   "source": "hyperliquid",
+   "close": 76.91,
+   "chg1d": -4.26,
+   "vol_ratio": 1.2,
+   "upper_shadow": 67.0,
+   "dd60": -14.2,
    "ext_ema5": -2.5,
    "ema_bull": false,
    "above_ema20": false,
-   "rs5": -0.72,
-   "rs20": -2.4,
-   "bars": 364,
+   "rs5": -0.8,
+   "rs20": -2.21,
+   "bars": 400,
    "failure_conditions": [
     "Assistance Fund 回购停止或月度回购额缩减>50%",
     "永续 DEX 市占率跌破 40%（DefiLlama Derivatives）",
