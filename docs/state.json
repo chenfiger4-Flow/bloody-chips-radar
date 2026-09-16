@@ -1,6 +1,6 @@
 {
- "run_utc": "2026-09-16T04:03:50.074987+00:00",
- "run_bjt": "2026-09-16 12:03",
+ "run_utc": "2026-09-16T04:15:00.478401+00:00",
+ "run_bjt": "2026-09-16 12:15",
  "mode": "all",
  "macro": {
   "VIX": {
@@ -17,9 +17,9 @@
   },
   "DXY": {
    "value": 99.65,
-   "chg5d": 0.82,
+   "chg5d": 0.89,
    "above_ema20": true,
-   "date": "2026-09-15"
+   "date": "2026-09-16"
   },
   "SMH": {
    "value": 542.11,
@@ -38,13 +38,13 @@
  "funding": {
   "BTC": {
    "funding_8h": 1.25e-05,
-   "oi": 36087.49218,
-   "mark": 75853.6
+   "oi": 36054.54104,
+   "mark": 75859.0
   },
   "HYPE": {
    "funding_8h": 1.25e-05,
-   "oi": 20487391.42000001,
-   "mark": 77.517
+   "oi": 20453516.46,
+   "mark": 77.325
   }
  },
  "rows": [
@@ -420,10 +420,10 @@
    "cluster": "crypto_beta",
    "date": "2026-09-16",
    "source": "yfinance",
-   "close": 75812.07,
-   "chg1d": -3.01,
-   "vol_ratio": 1.41,
-   "upper_shadow": 33.0,
+   "close": 75823.64,
+   "chg1d": -2.99,
+   "vol_ratio": 1.4,
+   "upper_shadow": 31.0,
    "dd60": -7.8,
    "ext_ema5": -1.6,
    "ema_bull": false,
@@ -453,16 +453,16 @@
    "cluster": "crypto_beta",
    "date": "2026-09-16",
    "source": "yfinance",
-   "close": 77.5,
-   "chg1d": -3.43,
+   "close": 77.31,
+   "chg1d": -3.67,
    "vol_ratio": 0.79,
-   "upper_shadow": 29.0,
-   "dd60": -13.5,
-   "ext_ema5": -2.0,
+   "upper_shadow": 46.0,
+   "dd60": -13.7,
+   "ext_ema5": -2.2,
    "ema_bull": false,
    "above_ema20": false,
-   "rs5": -0.24,
-   "rs20": -1.94,
+   "rs5": -0.5,
+   "rs20": -2.19,
    "bars": 364,
    "failure_conditions": [
     "回购机制停止或大幅缩减",
