@@ -25,7 +25,7 @@ macro:
   - {ticker: ^VIX,     name: VIX}
   - {ticker: ^TNX,     name: US10Y}
   - {ticker: DX-Y.NYB, name: DXY}
-  - {ticker: SMH,      name: 半导体ETF}
+  - {ticker: SMH,      name: SMH}
 
 # ===== 预写失效条件（恐慌时只回答“命中几条”，不临场找理由）=====
 # 这些是初始版本，你必须按自己的理解逐条改写。
