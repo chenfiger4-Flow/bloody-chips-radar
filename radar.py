@@ -267,24 +267,33 @@ def run():
 def macro_summary(p):
     m, fng = p["macro"], p.get("fng")
     parts = []
-    vix = m.get("VIX", {})
-    if not vix.get("missing"):
+    vix = m.get("VIX") or {}
+    if vix.get("value") is not None:
         lvl = "恐慌" if vix["value"] >= 30 else "警戒" if vix["value"] >= 22 else "平静"
         parts.append(f"VIX {vix['value']}（{lvl}）")
-    if fng: parts.append(f"加密恐贪 {fng['value']} {fng['label']}（7日 {fng['chg7d']:+d}）")
-    for k in ("US10Y", "DXY", "SMH"):
-        v = m.get(k, {})
-        if not v.get("missing"): parts.append(f"{k} {v['value']} ({v['chg5d']:+.1f}%/5d)")
+    if fng and fng.get("value") is not None:
+        chg = f"（7日 {fng['chg7d']:+d}）" if fng.get("chg7d") is not None else ""
+        parts.append(f"加密恐贪 {fng['value']} {fng.get('label','')}{chg}")
+    for k, v in m.items():
+        if k == "VIX" or v.get("value") is None:
+            continue
+        parts.append(f"{k} {v['value']} ({v['chg5d']:+.1f}%/5d)")
+    miss = [k for k, v in m.items() if v.get("missing")]
+    if miss:
+        parts.append("缺失：" + ",".join(miss))
     return " | ".join(parts) if parts else "宏观数据缺失"
 
 def risk_regime(p):
     m, fng = p["macro"], p.get("fng")
     score = 0
-    vix = m.get("VIX", {}).get("value")
-    if vix: score += 2 if vix >= 30 else 1 if vix >= 22 else 0
-    if fng: score += 2 if fng["value"] <= 20 else 1 if fng["value"] <= 30 else 0
-    smh = m.get("SMH", {})
-    if smh and not smh.get("missing") and not smh["above_ema20"]: score += 1
+    vix = (m.get("VIX") or {}).get("value")
+    if vix is not None:
+        score += 2 if vix >= 30 else 1 if vix >= 22 else 0
+    if fng and fng.get("value") is not None:
+        score += 2 if fng["value"] <= 20 else 1 if fng["value"] <= 30 else 0
+    smh = m.get("SMH") or m.get("半导体ETF") or {}
+    if smh.get("value") is not None and not smh.get("above_ema20", True):
+        score += 1
     return "风险偏好恶化 → 个体信号胜率下降，降仓或等确认" if score >= 3 else "风险偏好中性" if score >= 1 else "风险偏好正常"
 
 def build_telegram(p):
