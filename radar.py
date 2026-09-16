@@ -86,6 +86,16 @@ def fetch_hyperliquid(coin, days=400):
         return None, None
 
 HL_MAP = {"HYPE32196-USD": "HYPE"}   # 原生交易所优先
+CRYPTO_TICKERS = {t["ticker"] for t in CFG["watchlist"] if t["type"].startswith("crypto")}
+
+def drop_open_candle(df):
+    """加密 7x24：运行时刻当天(UTC)那根 K 还没走完，成交量只有一部分，
+    量比会虚低而误触发“缩量回踩”(S3/LPS)。统一丢掉 index >= 今日UTC 的行。
+    美股不适用：22:30 UTC 运行时当日 K 已收盘。"""
+    if df is None: return None
+    today_utc = pd.Timestamp(NOW.date())
+    out = df[df.index < today_utc]
+    return out if len(out) > 30 else df
 
 def fetch_fng():
     try:
@@ -122,8 +132,8 @@ def enrich(df):
     rng = (d.High - d.Low).replace(0, np.nan)
     d["upper_shadow"] = (d.High - d.Close) / rng
     d["close_pos"] = (d.Close - d.Low) / rng
-    d["hi60"] = d.High.rolling(60).max()
-    d["lo60"] = d.Low.rolling(60).min()
+    d["hi60"] = d.High.rolling(60, min_periods=20).max()   # 次新股不足60根时用已有K，避免 NaN
+    d["lo60"] = d.Low.rolling(60, min_periods=20).min()
     d["dd60"] = d.Close / d.hi60 - 1
     return d
 
@@ -233,6 +243,8 @@ def run():
             df, src = fetch_yf(ticker)
         if df is None and ticker in CG_MAP:
             df, src = fetch_coingecko(CG_MAP[ticker])
+        if ticker in CRYPTO_TICKERS:               # 所有加密源统一丢弃未收盘的当日 K
+            df = drop_open_candle(df)
         cache[ticker] = (df, src); return cache[ticker]
 
     # 宏观
@@ -268,10 +280,12 @@ def run():
             "bars": int(len(d)), "failure_conditions": CFG["failure_conditions"].get(it["ticker"], []),
             **diag,
         }
-        if it["type"] == "newlisting" and len(d) < 120:
-            row["flags"].append(f"次新股：仅 {len(d)} 根日线，均量基准不稳，阈值未经检验")
-        if it["type"] == "crypto_alt":
-            row["flags"].append("山寨币：禁止情绪抄底，仅 S4 后半仓")
+        # 结构性提示只在“有事发生”(非 S0/S5) 时才进 flags，避免每天占据④板块
+        if row["state"] not in ("S0", "S5"):
+            if it["type"] == "newlisting" and len(d) < 120:
+                row["flags"].append(f"次新股：仅 {len(d)} 根日线，均量基准不稳，阈值未经检验")
+            if it["type"] == "crypto_alt":
+                row["flags"].append("山寨币：禁止情绪抄底，仅 S4 后半仓")
         row["prev_state"] = prev_state.get(it["ticker"], "S0")
         row["changed"] = row["prev_state"] != row["state"]
         rows.append(row)
@@ -363,12 +377,19 @@ def build_telegram(p):
     return "\n".join(L)
 
 def send_telegram(text):
-    tok, chat = os.environ.get("TELEGRAM_BOT_TOKEN"), os.environ.get("TELEGRAM_CHAT_ID")
+    # .strip() 防止 Secret 粘贴时带入换行（曾导致 URL 被截断、静默失败）
+    tok = os.environ.get("TELEGRAM_BOT_TOKEN", "").strip()
+    chat = os.environ.get("TELEGRAM_CHAT_ID", "").strip()
     if not tok or not chat:
-        print("[warn] 未配置 Telegram secrets，跳过推送"); return
+        print(f"[TG] 未读到凭据 token={'有' if tok else '空'} chat_id={'有' if chat else '空'}"); return
     for i in range(0, len(text), 3900):
-        requests.post(f"https://api.telegram.org/bot{tok}/sendMessage",
-                      json={"chat_id": chat, "text": text[i:i+3900], "parse_mode": "HTML", "disable_web_page_preview": True}, timeout=20)
+        try:
+            r = requests.post(f"https://api.telegram.org/bot{tok}/sendMessage",
+                              json={"chat_id": chat, "text": text[i:i+3900], "parse_mode": "HTML",
+                                    "disable_web_page_preview": True}, timeout=20)
+            print(f"[TG] status={r.status_code} resp={r.text[:200]}")
+        except Exception as e:
+            print(f"[TG] 发送异常: {e}")
 
 def build_html(p):
     color = {"S0": "bg-gray-100", "S1": "bg-yellow-100", "S2": "bg-orange-100", "S3": "bg-amber-100",
