@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-带血筹码雷达 v1
+带血筹码雷达
 恐慌触发研究，量价确认触发交易。
 状态机: S0 常态 / S1 压力观察 / S2 SC候选 / S3 测试中 / S4 确认 / S5 趋势 / S9 破位
 """
@@ -73,17 +73,19 @@ def fetch_hyperliquid(coin, days=400):
                           timeout=20)
         j = r.json()
         if not isinstance(j, list) or len(j) < 30:
-            return None, None
+            print(f"[HL] {coin} 返回异常: {str(j)[:120]}"); return None, None
         df = pd.DataFrame(j)
-        df.index = pd.to_datetime(df["t"].astype("int64"), unit="ms").normalize()
+        # 注意：必须先转成 DatetimeIndex 再 normalize（Series 没有 .normalize()，旧版在此抛错后静默回退到 yfinance）
+        df.index = pd.DatetimeIndex(pd.to_datetime(df["t"].astype("int64"), unit="ms")).normalize()
         df = df.rename(columns={"o": "Open", "h": "High", "l": "Low", "c": "Close", "v": "Volume"})
         df = df[["Open", "High", "Low", "Close", "Volume"]].astype(float)
         df = df[~df.index.duplicated(keep="last")].dropna()
         today_utc = pd.Timestamp(NOW.date())
         df = df[df.index < today_utc]          # 丢掉今天未收盘的 K
+        print(f"[HL] {coin} 取得 {len(df)} 根日线，最新 {df.index[-1].date()}")
         return (df, "hyperliquid") if len(df) > 30 else (None, None)
-    except Exception:
-        return None, None
+    except Exception as e:
+        print(f"[HL] {coin} 获取失败: {e}"); return None, None
 
 HL_MAP = {"HYPE32196-USD": "HYPE"}   # 原生交易所优先
 CRYPTO_TICKERS = {t["ticker"] for t in CFG["watchlist"] if t["type"].startswith("crypto")}
@@ -339,9 +341,118 @@ def risk_regime(p):
         score += 1
     return "风险偏好恶化 → 个体信号胜率下降，降仓或等确认" if score >= 3 else "风险偏好中性" if score >= 1 else "风险偏好正常"
 
+# ---------------- 规则化解读（全部由阈值生成，不含主观判断） ----------------
+def macro_read(p):
+    """把五个宏观指标放在一起读：利率端 / 美元 / 半导体 / 波动率与情绪 → 一句结论"""
+    m, fng = p["macro"], p.get("fng")
+    vix = (m.get("VIX") or {}).get("value")
+    tnx = m.get("US10Y") or {}
+    dxy = m.get("DXY") or {}
+    smh = m.get("SMH") or {}
+    out = []
+    # 利率
+    if tnx.get("value") is not None:
+        v, c = tnx["value"], tnx["chg5d"]
+        lvl = "异常高位" if v >= 4.75 else "偏高" if v >= 4.25 else "正常区间"
+        spd = "且5日快速上行" if c >= 3 else "且5日快速回落" if c <= -3 else "5日变化不大"
+        out.append(f"利率：10Y {v}% {lvl}，{spd}")
+    # 美元 与 利率同向？
+    if dxy.get("value") is not None and tnx.get("value") is not None:
+        same = (dxy["chg5d"] > 0) == (tnx["chg5d"] > 0)
+        if abs(dxy["chg5d"]) < 0.5: out.append("美元：横盘，无增量信息")
+        elif same and dxy["chg5d"] > 0: out.append("美元：随利率走强，属利率驱动（非避险驱动）")
+        elif dxy["chg5d"] > 0: out.append("美元：利率未升而美元走强 → 避险买盘，警惕")
+        else: out.append("美元：走弱，对加密与成长股偏友好")
+    # 半导体
+    if smh.get("value") is not None:
+        c, ab = smh["chg5d"], smh.get("above_ema20", True)
+        if c <= -5: out.append(f"半导体：5日 {c:+.1f}% 领跌{'，且已跌破EMA20' if not ab else '，仍在EMA20上方'} → 引擎在熄火")
+        elif c <= -2: out.append(f"半导体：5日 {c:+.1f}% 偏弱{'，跌破EMA20' if not ab else ''}")
+        elif c >= 3: out.append(f"半导体：5日 {c:+.1f}% 领涨，风险偏好在扩张")
+        else: out.append(f"半导体：5日 {c:+.1f}% 平稳")
+    # 波动率 + 情绪
+    if vix is not None:
+        if vix >= 30: out.append(f"波动率：VIX {vix} 恐慌区，SC（抛售高潮）可能正在发生，开始逐日盯量")
+        elif vix >= 22: out.append(f"波动率：VIX {vix} 警戒区，保护需求上升")
+        else: out.append(f"波动率：VIX {vix} 平静，期权市场未定价风险 → 不会有 SC")
+    if fng and fng.get("value") is not None:
+        v, c = fng["value"], fng.get("chg7d")
+        trend = "" if c is None else "，7日转差" if c <= -10 else "，7日转好" if c >= 10 else ""
+        zone = "极度恐惧（加密 SC 常见区）" if v <= 20 else "恐惧" if v <= 30 else "贪婪" if v >= 70 else "中性"
+        out.append(f"加密情绪：{v} {zone}{trend}")
+    # 综合结论
+    stress = 0
+    if tnx.get("value") is not None and tnx["value"] >= 4.75: stress += 1
+    if tnx.get("chg5d") is not None and tnx["chg5d"] >= 3: stress += 1
+    if smh.get("chg5d") is not None and smh["chg5d"] <= -5: stress += 1
+    if smh.get("value") is not None and not smh.get("above_ema20", True): stress += 1
+    calm = (vix is not None and vix < 22) and (not fng or fng.get("value", 50) > 30)
+    if stress >= 2 and calm:
+        concl = "引线已点、炸药未响：利率/半导体端有压力，但 VIX 与情绪尚未反应。不做任何事，每天盯 10Y 与 SMH。"
+    elif stress >= 2 and not calm:
+        concl = "压力已传导到波动率/情绪端 → 进入观察 SC 的窗口，逐日看量，仍不抄底。"
+    elif stress <= 1 and calm:
+        concl = "环境平静，无便宜筹码。趋势健康的标的不追，等待。"
+    else:
+        concl = "波动率/情绪先于基本面走坏，多为短期扰动；看是否演化为 SC，勿预判。"
+    return "；".join(out) + "。\n结论：" + concl
+
+def row_read(r):
+    """每个标的一句话：状态 + 该做什么，全部按规则生成"""
+    s, vr, rs = r["state"], r["vol_ratio"], r.get("rs20")
+    if s == "NA": return "数据缺失，不判定"
+    if s == "S0":
+        if r["ema_bull"]: t = "多头排列，趋势健康；此处没有便宜筹码，不追"
+        elif not r["above_ema20"]: t = f"已跌破 EMA20 但回撤 {r['dd60']}% 未到压力线，观望"
+        else: t = "震荡区，无信号"
+    elif s == "S1":
+        t = f"回撤 {r['dd60']}% 触线 → 只做功课：逐条核对失效条件；"
+        t += "量比" + (f"{vr}x 已见放量，盯是否形成 SC（抛售高潮）" if vr >= 1.5 else f"{vr}x 未见恐慌量，SC 未出现，不动手")
+    elif s == "S2":
+        t = f"SC 候选已出现（{r.get('sc_date')}），等缩量回踩 ST（二次测试）；此处禁止买入"
+    elif s == "S3":
+        t = "回踩缩量、未破 SC 低点 → 供应衰竭迹象；等放量收复 SC 高点（SOS）才算确认"
+    elif s == "S4":
+        tr = r.get("trade") or {}
+        t = f"量价确认 → 可按风险预算试探，止损 {tr.get('stop')}（风险 {tr.get('risk_pct')}%）；先核失效条件"
+    elif s == "S5":
+        t = "确认后趋势延续，持有不加仓"
+    elif s == "S9":
+        t = "放量跌破 SC 低点 → 供应未出清，持仓止损，计数归零"
+    else: t = ""
+    if rs is not None and s in ("S0", "S1", "S5"):
+        if rs >= 5: t += f"；RS20 {rs:+.1f}% 明显强于基准"
+        elif rs <= -5: t += f"；RS20 {rs:+.1f}% 明显弱于基准，若有 SC 优先级靠后"
+    if r.get("flags"): t += "；⚠ " + r["flags"][0]
+    return t
+
+def funding_read(p):
+    """资金费率解读：年化 + 与价格方向的组合含义"""
+    fund = p.get("funding") or {}
+    if not fund: return None
+    px = {"BTC": "BTC-USD", "HYPE": "HYPE32196-USD"}
+    chg = {r["ticker"]: r.get("chg1d", 0) for r in p["rows"] if r["state"] != "NA"}
+    L = []
+    for k, v in fund.items():
+        f8 = v["funding_8h"] * 100; apr = f8 * 3 * 365
+        c1 = chg.get(px.get(k), 0) or 0
+        if f8 >= 0.03: lvl = "多头极度拥挤"
+        elif f8 >= 0.01: lvl = "多头偏拥挤"
+        elif f8 <= -0.01: lvl = "空头付费（空头拥挤）"
+        elif f8 < 0: lvl = "略偏空"
+        else: lvl = "中性"
+        if f8 >= 0.01 and c1 < -2: mean = "价跌而多头仍付费加杠杆 → 多头被套未认输，下跌未完成"
+        elif f8 <= -0.01 and c1 < -2: mean = "价跌且空头付费 → 空头拥挤，若出现 SC 易有轧空反弹"
+        elif f8 <= -0.01 and c1 > 0: mean = "价涨空头付费 → 轧空进行中，不追"
+        elif f8 >= 0.03: mean = "杠杆过热，随时可能清算式回落"
+        else: mean = "杠杆不拥挤，费率无增量信息"
+        L.append(f"{k} {f8:.4f}%/8h（年化约 {apr:.1f}%）{lvl} → {mean}")
+    return L
+
 def build_telegram(p):
     rows = [r for r in p["rows"] if r["state"] != "NA"]
-    L = [f"<b>带血筹码雷达 · {p['mode'].upper()}</b>  {p['run_bjt']} 北京时间", macro_summary(p), f"<i>{risk_regime(p)}</i>", ""]
+    L = [f"<b>带血筹码雷达 · {p['mode'].upper()}</b>  {p['run_bjt']} 北京时间", macro_summary(p), f"<i>{risk_regime(p)}</i>",
+         f"<b>宏观解读：</b>{macro_read(p)}", ""]
     ch = [r for r in rows if r["changed"]]
     L.append("<b>① 发生了什么变化</b>")
     L += [f"• {r['ticker']} {STATE_NAME[r['prev_state']]} → <b>{STATE_NAME[r['state']]}</b>" for r in ch] or ["• 无状态变化"]
@@ -360,6 +471,7 @@ def build_telegram(p):
             rs = f" RS20 {r['rs20']:+.1f}%" if r["rs20"] is not None else ""
             L.append(f"• {r['ticker']} [{STATE_NAME[r['state']]}] {r['close']} 回撤{r['dd60']}% 量比{r['vol_ratio']}x{rs}")
             for n in r["notes"][:2]: L.append(f"  – {n}")
+            L.append(f"  → {row_read(r)}")
     else: L.append("• 无")
     wait = [r for r in rows if r["state"] in ("S9",) or r["flags"]]
     L.append("\n<b>④ 应该继续等 / 警示</b>")
@@ -367,12 +479,15 @@ def build_telegram(p):
         for r in wait:
             L.append(f"• {r['ticker']} [{STATE_NAME[r['state']]}] " + "；".join(r["flags"][:2] or r["notes"][:1]))
     else: L.append("• 无")
-    trend = [r["ticker"] for r in rows if r["state"] in ("S0", "S5") and r["ema_bull"]]
-    if trend: L.append(f"\n趋势健康（非恐慌）：{', '.join(trend)}")
+    L.append("\n<b>⑤ 各标的一句话</b>")
+    for r in rows:
+        if r["state"] in ("S1", "S2", "S3", "S4", "S9"): continue   # 上面板块已详述
+        L.append(f"• {r['ticker']} [{STATE_NAME[r['state']]}] {row_read(r)}")
     if p["missing"]: L.append(f"\n⚠ 数据缺失：{', '.join(p['missing'])}")
-    fund = p.get("funding") or {}
-    if fund:
-        L.append("资金费率(8h)：" + " | ".join(f"{k} {v['funding_8h']*100:.4f}%" for k, v in fund.items()))
+    fr = funding_read(p)
+    if fr:
+        L.append("\n<b>资金费率</b>")
+        L += [f"• {x}" for x in fr]
     L.append("\n<i>阈值未经历史检验，仅作观察提醒。买入需另符合风险预算。</i>")
     return "\n".join(L)
 
@@ -397,7 +512,7 @@ def build_html(p):
     tr = ""
     for r in p["rows"]:
         if r["state"] == "NA":
-            tr += f"<tr class='bg-gray-300'><td class='p-2'>{r['ticker']}</td><td colspan='11' class='p-2'>数据缺失</td></tr>"; continue
+            tr += f"<tr class='bg-gray-300'><td class='p-2'>{r['ticker']}</td><td colspan='12' class='p-2'>数据缺失</td></tr>"; continue
         us = f"{r['upper_shadow']:.0f}%" if r["upper_shadow"] is not None else "N/A"
         rs = f"{r['rs20']:+.1f}%" if r["rs20"] is not None else "—"
         notes = "<br>".join(r["notes"] + [f"<span class='text-red-700'>{x}</span>" for x in r["flags"]])
@@ -410,20 +525,24 @@ def build_html(p):
 <td class='p-2 text-right'>{r['vol_ratio']}x</td><td class='p-2 text-right'>{us}</td>
 <td class='p-2 text-right'>{r['dd60']}%</td><td class='p-2 text-right'>{rs}</td>
 <td class='p-2 text-center'>{'多头' if r['ema_bull'] else '—'}<br><span class='text-xs'>{'>EMA20' if r['above_ema20'] else '<EMA20'}</span></td>
-<td class='p-2 text-xs'>{notes}</td><td class='p-2 text-xs'>{trade}</td>
+<td class='p-2 text-xs'>{notes}</td>
+<td class='p-2 text-xs text-slate-800'>{row_read(r)}</td>
+<td class='p-2 text-xs'>{trade}</td>
 <td class='p-2 text-xs text-gray-600'>{fc}</td>
 <td class='p-2 text-xs text-gray-400'>{r['date']}<br>{r['source']}</td></tr>"""
     html = f"""<!doctype html><html lang="zh"><head><meta charset="utf-8"><title>带血筹码雷达</title>
 <meta name="viewport" content="width=device-width,initial-scale=1"><script src="https://cdn.tailwindcss.com"></script></head>
 <body class="bg-slate-50 p-4 text-sm">
-<h1 class="text-2xl font-bold">带血筹码雷达 v1</h1>
+<h1 class="text-2xl font-bold">带血筹码雷达</h1>
 <p class="text-gray-600">运行：{p['run_bjt']} 北京时间 · 模式 {p['mode']} · <a class="underline" href="state.json">JSON</a></p>
-<div class="my-3 p-3 bg-white rounded shadow"><b>宏观：</b>{macro_summary(p)}<br><b>环境判定：</b>{risk_regime(p)}</div>
+<div class="my-3 p-3 bg-white rounded shadow"><b>宏观：</b>{macro_summary(p)}<br><b>环境判定：</b>{risk_regime(p)}
+<div class="mt-2 pt-2 border-t text-slate-700"><b>宏观解读：</b>{macro_read(p).replace(chr(10), '<br>')}</div>
+{('<div class="mt-2 pt-2 border-t text-slate-700"><b>资金费率：</b><br>' + '<br>'.join(funding_read(p)) + '</div>') if funding_read(p) else ''}</div>
 <div class="overflow-x-auto bg-white rounded shadow"><table class="min-w-full">
 <thead class="bg-slate-800 text-white text-xs"><tr>
 <th class="p-2 text-left">标的</th><th class="p-2 text-left">状态</th><th class="p-2">收盘/日涨跌</th><th class="p-2">量比</th>
 <th class="p-2">上影</th><th class="p-2">60日回撤</th><th class="p-2">RS20</th><th class="p-2">均线</th>
-<th class="p-2 text-left">量价证据</th><th class="p-2 text-left">交易参数(S4)</th><th class="p-2 text-left">预写失效条件</th><th class="p-2">数据</th>
+<th class="p-2 text-left">量价证据</th><th class="p-2 text-left">解读</th><th class="p-2 text-left">交易参数(S4)</th><th class="p-2 text-left">预写失效条件</th><th class="p-2">数据</th>
 </tr></thead><tbody>{tr}</tbody></table></div>
 <div class="mt-4 text-xs text-gray-500">
 <p>状态机：S0 常态 → S1 压力观察（只研究）→ S2 SC候选 → S3 测试中 → <b>S4 确认（才允许试探仓）</b> → S5 趋势；S9 放量破 SC 低点 = 供应未出清。</p>
