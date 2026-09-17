@@ -1,50 +1,50 @@
 {
- "run_utc": "2026-09-16T16:49:25.755873+00:00",
- "run_bjt": "2026-09-17 00:49",
+ "run_utc": "2026-09-17T00:43:49.185016+00:00",
+ "run_bjt": "2026-09-17 08:43",
  "mode": "crypto",
  "macro": {
   "VIX": {
-   "value": 16.84,
-   "chg5d": 2.31,
+   "value": 17.71,
+   "chg5d": 7.59,
    "above_ema20": true,
    "date": "2026-09-16"
   },
   "US10Y": {
-   "value": 4.96,
-   "chg5d": 2.56,
+   "value": 5.01,
+   "chg5d": 3.49,
    "above_ema20": true,
    "date": "2026-09-16"
   },
   "DXY": {
-   "value": 99.69,
-   "chg5d": 0.94,
+   "value": 100.27,
+   "chg5d": 1.52,
    "above_ema20": true,
    "date": "2026-09-16"
   },
   "SMH": {
-   "value": 551.16,
-   "chg5d": -4.03,
+   "value": 542.11,
+   "chg5d": -5.51,
    "above_ema20": false,
-   "date": "2026-09-16"
+   "date": "2026-09-15"
   }
  },
  "fng": {
-  "value": 51,
+  "value": 50,
   "label": "Neutral",
-  "chg7d": -15,
+  "chg7d": -19,
   "source": "alternative.me",
-  "ts": "2026-09-16"
+  "ts": "2026-09-17"
  },
  "funding": {
   "BTC": {
-   "funding_8h": 1.25e-05,
-   "oi": 37172.27086,
-   "mark": 75747.0
+   "funding_8h": 1.04834e-05,
+   "oi": 37948.40468,
+   "mark": 76434.0
   },
   "HYPE": {
    "funding_8h": 1.25e-05,
-   "oi": 20584072.079999987,
-   "mark": 78.857
+   "oi": 20528552.39999999,
+   "mark": 78.327
   }
  },
  "rows": [
@@ -65,7 +65,7 @@
    "above_ema20": false,
    "rs5": null,
    "rs20": null,
-   "bars": 365,
+   "bars": 364,
    "failure_conditions": [
     "现货 ETF 连续 4 周净流出（Farside）",
     "美国政策转向明确打压（战略储备取消/交易所监管收紧）",
@@ -86,18 +86,18 @@
    "name": "Hyperliquid",
    "type": "crypto_alt",
    "cluster": "crypto_beta",
-   "date": "2026-09-15",
+   "date": "2026-09-16",
    "source": "hyperliquid",
-   "close": 76.91,
-   "chg1d": -4.26,
-   "vol_ratio": 1.2,
-   "upper_shadow": 67.0,
-   "dd60": -14.2,
-   "ext_ema5": -2.5,
+   "close": 78.23,
+   "chg1d": 1.72,
+   "vol_ratio": 1.17,
+   "upper_shadow": 57.0,
+   "dd60": -12.7,
+   "ext_ema5": -0.6,
    "ema_bull": false,
    "above_ema20": false,
-   "rs5": -0.8,
-   "rs20": -2.21,
+   "rs5": -0.21,
+   "rs20": -3.25,
    "bars": 400,
    "failure_conditions": [
     "Assistance Fund 回购停止或月度回购额缩减>50%",
@@ -127,7 +127,7 @@
   "META": "S0",
   "TSLA": "S0",
   "SPCX": "S0",
-  "CRCL": "S0",
+  "CRCL": "S1",
   "BTC-USD": "S0",
   "HYPE32196-USD": "S0"
  }
