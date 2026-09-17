@@ -2,10 +2,8 @@ name: bloody-chips-radar
 
 on:
   schedule:
-    # 加密：UTC 00:15 / 12:15 = 北京 08:15 / 20:15
-    - cron: "15 0,12 * * *"
-    # 美股：UTC 22:30 周二至周六 = 收盘后（夏令时 +2.5h，冬令时 +1.5h）
-    - cron: "30 22 * * 1-5"
+    # 北京 08:15 = UTC 00:15，美股盘后（前一天收盘后）完整复盘
+    - cron: "15 0 * * *"
   workflow_dispatch:
     inputs:
       mode:
@@ -33,10 +31,8 @@ jobs:
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             echo "mode=${{ github.event.inputs.mode }}" >> $GITHUB_OUTPUT
-          elif [ "$(date -u +%H)" = "22" ]; then
-            echo "mode=us" >> $GITHUB_OUTPUT
           else
-            echo "mode=crypto" >> $GITHUB_OUTPUT
+            echo "mode=us" >> $GITHUB_OUTPUT
           fi
 
       - name: Run radar
