@@ -1,25 +1,25 @@
 {
- "run_utc": "2026-09-22T04:48:53.238464+00:00",
- "run_bjt": "2026-09-22 12:48",
+ "run_utc": "2026-09-23T04:40:34.909212+00:00",
+ "run_bjt": "2026-09-23 12:40",
  "mode": "us",
  "macro": {
   "VIX": {
-   "value": 14.87,
-   "chg5d": -13.04,
+   "value": 14.21,
+   "chg5d": -17.38,
    "above_ema20": false,
-   "date": "2026-09-21"
+   "date": "2026-09-22"
   },
   "US10Y": {
-   "value": 4.96,
-   "chg5d": 0.04,
-   "above_ema20": true,
-   "date": "2026-09-21"
-  },
-  "DXY": {
-   "value": 100.34,
-   "chg5d": 0.69,
+   "value": 4.97,
+   "chg5d": -0.56,
    "above_ema20": true,
    "date": "2026-09-22"
+  },
+  "DXY": {
+   "value": 100.69,
+   "chg5d": 1.05,
+   "above_ema20": true,
+   "date": "2026-09-23"
   },
   "SMH": {
    "value": 596.03,
@@ -40,7 +40,7 @@
    "source": "yfinance",
    "close": 773.5,
    "chg1d": 1.55,
-   "vol_ratio": 1.21,
+   "vol_ratio": 1.22,
    "upper_shadow": 16.0,
    "dd60": -0.8,
    "ext_ema5": 1.1,
@@ -48,7 +48,7 @@
    "above_ema20": true,
    "rs5": null,
    "rs20": null,
-   "bars": 251,
+   "bars": 250,
    "failure_conditions": [
     "ISM制造业+服务业 PMI 同时<50 且连续两月（ISM 官网）",
     "高收益债利差(FRED: BAMLH0A0HYM2) 30日内走阔>150bp",
@@ -73,7 +73,7 @@
    "source": "yfinance",
    "close": 741.47,
    "chg1d": 2.77,
-   "vol_ratio": 1.45,
+   "vol_ratio": 1.46,
    "upper_shadow": 11.0,
    "dd60": -0.2,
    "ext_ema5": 2.5,
@@ -81,7 +81,7 @@
    "above_ema20": true,
    "rs5": 2.89,
    "rs20": 2.91,
-   "bars": 251,
+   "bars": 250,
    "failure_conditions": [
     "Mag7 中≥3家下修全年资本开支指引（AI 需求证伪）",
     "10Y 收盘>5.0% 且 20个交易日内上行>50bp（2026-09 已在 5.0% 边缘，重点盯）",
@@ -116,7 +116,7 @@
    "above_ema20": true,
    "rs5": -2.78,
    "rs20": 5.65,
-   "bars": 251,
+   "bars": 250,
    "failure_conditions": [
     "iPhone 收入连续两季同比下滑>5%",
     "服务收入增速跌破 8%",
@@ -151,7 +151,7 @@
    "above_ema20": true,
    "rs5": -5.31,
    "rs20": -0.13,
-   "bars": 251,
+   "bars": 250,
    "failure_conditions": [
     "Azure 增速（固定汇率）跌破 25%（FY26Q4: 43%）",
     "商业 RPO 同比增速连续两季下降",
@@ -186,7 +186,7 @@
    "above_ema20": true,
    "rs5": 3.23,
    "rs20": 1.97,
-   "bars": 251,
+   "bars": 250,
    "failure_conditions": [
     "数据中心收入环比转负",
     "前两大客户任一公开宣布削减 GPU 订单或改用自研芯片替代>30%",
@@ -221,7 +221,7 @@
    "above_ema20": true,
    "rs5": -2.62,
    "rs20": -4.0,
-   "bars": 251,
+   "bars": 250,
    "failure_conditions": [
     "AWS 增速跌破 20%（2026Q2: 37%，连续加速）",
     "AWS 经营利润率跌破 32%（2026Q2: 39%；2024-25 区间 33-38%）",
@@ -246,7 +246,7 @@
    "source": "yfinance",
    "close": 354.97,
    "chg1d": 1.55,
-   "vol_ratio": 1.17,
+   "vol_ratio": 1.18,
    "upper_shadow": 31.0,
    "dd60": -7.7,
    "ext_ema5": 1.7,
@@ -254,7 +254,7 @@
    "above_ema20": true,
    "rs5": -2.96,
    "rs20": -0.99,
-   "bars": 251,
+   "bars": 250,
    "failure_conditions": [
     "搜索收入增速跌破 5%（2026Q2: +17%）",
     "Google Cloud 积压订单环比下降",
@@ -281,7 +281,7 @@
    "source": "yfinance",
    "close": 741.25,
    "chg1d": 11.34,
-   "vol_ratio": 2.38,
+   "vol_ratio": 2.39,
    "upper_shadow": 16.0,
    "dd60": -1.6,
    "ext_ema5": 7.2,
@@ -289,7 +289,7 @@
    "above_ema20": true,
    "rs5": 6.81,
    "rs20": 30.87,
-   "bars": 251,
+   "bars": 250,
    "failure_conditions": [
     "Family DAP（日活人数）环比下滑（Meta 已停报 DAU）",
     "广告收入增速跌破 8%",
@@ -324,7 +324,7 @@
    "above_ema20": true,
    "rs5": -0.0,
    "rs20": -0.5,
-   "bars": 251,
+   "bars": 250,
    "failure_conditions": [
     "汽车毛利率（不含碳积分）跌破 10%（2025 区间 12-15%，离阈值近）",
     "交付量连续两季同比下滑>10%",
@@ -351,7 +351,7 @@
    "source": "yfinance",
    "close": 151.85,
    "chg1d": -0.56,
-   "vol_ratio": 0.92,
+   "vol_ratio": 0.93,
    "upper_shadow": 96.0,
    "dd60": -11.9,
    "ext_ema5": 0.3,
@@ -394,7 +394,7 @@
    "above_ema20": true,
    "rs5": -7.56,
    "rs20": 3.47,
-   "bars": 251,
+   "bars": 250,
    "failure_conditions": [
     "USDC 流通市值 60日内下滑>20%（DefiLlama）",
     "联储累计降息>100bp 且非利息收入占比仍<15%",
