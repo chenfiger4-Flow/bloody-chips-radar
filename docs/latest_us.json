@@ -1,6 +1,6 @@
 {
- "run_utc": "2026-10-03T05:12:40.843688+00:00",
- "run_bjt": "2026-10-03 13:12",
+ "run_utc": "2026-10-04T05:46:18.057564+00:00",
+ "run_bjt": "2026-10-04 13:46",
  "mode": "us",
  "macro": {
   "VIX": {
@@ -269,8 +269,8 @@
    "sc_low": null,
    "sc_high": null,
    "trade": null,
-   "prev_state": "S1",
-   "changed": true
+   "prev_state": "S0",
+   "changed": false
   },
   {
    "ticker": "META",
@@ -405,8 +405,8 @@
    "sc_low": null,
    "sc_high": null,
    "trade": null,
-   "prev_state": "S0",
-   "changed": true
+   "prev_state": "S1",
+   "changed": false
   }
  ],
  "missing": [],
