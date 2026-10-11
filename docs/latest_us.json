@@ -1,6 +1,6 @@
 {
- "run_utc": "2026-10-10T05:45:23.979478+00:00",
- "run_bjt": "2026-10-10 13:45",
+ "run_utc": "2026-10-11T05:40:15.986242+00:00",
+ "run_bjt": "2026-10-11 13:40",
  "mode": "us",
  "macro": {
   "VIX": {
@@ -403,8 +403,8 @@
    "sc_low": null,
    "sc_high": null,
    "trade": null,
-   "prev_state": "S1",
-   "changed": true
+   "prev_state": "S0",
+   "changed": false
   }
  ],
  "missing": [],
