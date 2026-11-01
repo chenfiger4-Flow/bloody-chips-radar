@@ -1,6 +1,6 @@
 {
- "run_utc": "2026-10-31T05:31:00.012856+00:00",
- "run_bjt": "2026-10-31 13:31",
+ "run_utc": "2026-11-01T05:55:49.224147+00:00",
+ "run_bjt": "2026-11-01 13:55",
  "mode": "us",
  "macro": {
   "VIX": {
@@ -204,8 +204,8 @@
    "sc_low": null,
    "sc_high": null,
    "trade": null,
-   "prev_state": "S0",
-   "changed": true
+   "prev_state": "S1",
+   "changed": false
   },
   {
    "ticker": "AMZN",
@@ -240,8 +240,8 @@
    "sc_low": 229.36,
    "sc_high": 241.55,
    "trade": null,
-   "prev_state": "S1",
-   "changed": true
+   "prev_state": "S2",
+   "changed": false
   },
   {
    "ticker": "GOOGL",
@@ -384,8 +384,8 @@
    "sc_low": null,
    "sc_high": null,
    "trade": null,
-   "prev_state": "S0",
-   "changed": true
+   "prev_state": "S1",
+   "changed": false
   },
   {
    "ticker": "CRCL",
