@@ -1,31 +1,31 @@
 {
- "run_utc": "2026-11-06T06:32:43.817041+00:00",
- "run_bjt": "2026-11-06 14:32",
+ "run_utc": "2026-11-07T05:52:28.064370+00:00",
+ "run_bjt": "2026-11-07 13:52",
  "mode": "us",
  "macro": {
   "VIX": {
-   "value": 28.18,
-   "chg5d": 63.84,
+   "value": 25.64,
+   "chg5d": 32.03,
    "above_ema20": true,
-   "date": "2026-11-05"
+   "date": "2026-11-06"
   },
   "US10Y": {
-   "value": 4.84,
-   "chg5d": -3.05,
+   "value": 4.86,
+   "chg5d": -1.42,
    "above_ema20": false,
-   "date": "2026-11-05"
+   "date": "2026-11-06"
   },
   "DXY": {
-   "value": 101.79,
-   "chg5d": -0.09,
+   "value": 102.3,
+   "chg5d": 0.41,
    "above_ema20": true,
    "date": "2026-11-06"
   },
   "SMH": {
-   "value": 447.73,
-   "chg5d": -20.29,
+   "value": 463.96,
+   "chg5d": -11.2,
    "above_ema20": false,
-   "date": "2026-11-05"
+   "date": "2026-11-06"
   }
  },
  "fng": null,
@@ -36,14 +36,14 @@
    "name": "S&P500 ETF",
    "type": "etf",
    "cluster": "us_beta",
-   "date": "2026-11-05",
+   "date": "2026-11-06",
    "source": "yfinance",
-   "close": 733.0,
-   "chg1d": -4.41,
-   "vol_ratio": 2.77,
-   "upper_shadow": 99.0,
-   "dd60": -6.2,
-   "ext_ema5": -2.5,
+   "close": 735.29,
+   "chg1d": 0.31,
+   "vol_ratio": 1.25,
+   "upper_shadow": 91.0,
+   "dd60": -5.9,
+   "ext_ema5": -1.5,
    "ema_bull": false,
    "above_ema20": false,
    "rs5": null,
@@ -55,10 +55,7 @@
     "标普500 成分股前瞻EPS 一致预期 30日内下修>5%（FactSet）"
    ],
    "notes": [],
-   "flags": [
-    "放量长上影>50% → 派发信号，不追",
-    "放量跌破EMA20 → 趋势破坏"
-   ],
+   "flags": [],
    "state": "S0",
    "sc_date": null,
    "sc_low": null,
@@ -72,18 +69,18 @@
    "name": "Nasdaq100 ETF",
    "type": "etf",
    "cluster": "us_beta",
-   "date": "2026-11-05",
+   "date": "2026-11-06",
    "source": "yfinance",
-   "close": 647.05,
-   "chg1d": -6.49,
-   "vol_ratio": 2.74,
-   "upper_shadow": 100.0,
-   "dd60": -15.2,
-   "ext_ema5": -4.6,
+   "close": 656.1,
+   "chg1d": 1.4,
+   "vol_ratio": 1.42,
+   "upper_shadow": 80.0,
+   "dd60": -14.0,
+   "ext_ema5": -2.2,
    "ema_bull": false,
    "above_ema20": false,
-   "rs5": -4.82,
-   "rs20": -8.16,
+   "rs5": -2.28,
+   "rs20": -7.11,
    "bars": 251,
    "failure_conditions": [
     "Mag7 中≥3家下修全年资本开支指引（AI 需求证伪）",
@@ -91,48 +88,42 @@
     "SMH 相对 QQQ 20日 RS<-8%（半导体领跌）"
    ],
    "notes": [
-    "距60日高点回撤 -15.2% ≥ 触发线 10%"
+    "距60日高点回撤 -14.0% ≥ 触发线 10%"
    ],
-   "flags": [
-    "放量长上影>50% → 派发信号，不追"
-   ],
+   "flags": [],
    "state": "S1",
    "sc_date": null,
    "sc_low": null,
    "sc_high": null,
    "trade": null,
-   "prev_state": "S0",
-   "changed": true
+   "prev_state": "S1",
+   "changed": false
   },
   {
    "ticker": "AAPL",
    "name": "Apple",
    "type": "mega",
    "cluster": "us_beta",
-   "date": "2026-11-05",
+   "date": "2026-11-06",
    "source": "yfinance",
-   "close": 344.17,
-   "chg1d": -1.53,
-   "vol_ratio": 1.56,
-   "upper_shadow": 84.0,
-   "dd60": -3.2,
-   "ext_ema5": 0.3,
-   "ema_bull": true,
+   "close": 342.37,
+   "chg1d": -0.52,
+   "vol_ratio": 0.92,
+   "upper_shadow": 46.0,
+   "dd60": -3.7,
+   "ext_ema5": -0.2,
+   "ema_bull": false,
    "above_ema20": true,
-   "rs5": 8.19,
-   "rs20": 14.55,
+   "rs5": 4.32,
+   "rs20": 14.37,
    "bars": 251,
    "failure_conditions": [
     "iPhone 收入连续两季同比下滑>5%",
     "服务收入增速跌破 8%",
     "大中华区收入同比下滑>15%"
    ],
-   "notes": [
-    "EMA5/10/20 多头排列，趋势健康（非恐慌场景）"
-   ],
-   "flags": [
-    "放量长上影>50% → 派发信号，不追"
-   ],
+   "notes": [],
+   "flags": [],
    "state": "S0",
    "sc_date": null,
    "sc_low": null,
@@ -146,30 +137,26 @@
    "name": "Microsoft",
    "type": "mega",
    "cluster": "us_beta",
-   "date": "2026-11-05",
+   "date": "2026-11-06",
    "source": "yfinance",
-   "close": 535.93,
-   "chg1d": -3.58,
-   "vol_ratio": 1.68,
-   "upper_shadow": 87.0,
-   "dd60": -4.2,
-   "ext_ema5": 0.4,
+   "close": 530.61,
+   "chg1d": -0.99,
+   "vol_ratio": 1.05,
+   "upper_shadow": 56.0,
+   "dd60": -5.1,
+   "ext_ema5": -0.4,
    "ema_bull": true,
    "above_ema20": true,
-   "rs5": 10.64,
-   "rs20": 16.0,
+   "rs5": 6.65,
+   "rs20": 11.83,
    "bars": 251,
    "failure_conditions": [
     "Azure 增速（固定汇率）跌破 25%（FY26Q4: 43%）",
     "商业 RPO 同比增速连续两季下降",
     "FCF(TTM) 转负 — 管理层已承诺 FY27 FCF 为正，若违背即失效"
    ],
-   "notes": [
-    "EMA5/10/20 多头排列，趋势健康（非恐慌场景）"
-   ],
-   "flags": [
-    "放量长上影>50% → 派发信号，不追"
-   ],
+   "notes": [],
+   "flags": [],
    "state": "S0",
    "sc_date": null,
    "sc_low": null,
@@ -183,18 +170,18 @@
    "name": "Nvidia",
    "type": "mega",
    "cluster": "us_beta",
-   "date": "2026-11-05",
+   "date": "2026-11-06",
    "source": "yfinance",
-   "close": 181.6,
-   "chg1d": -9.26,
-   "vol_ratio": 2.69,
-   "upper_shadow": 99.0,
-   "dd60": -25.4,
-   "ext_ema5": -8.0,
+   "close": 186.64,
+   "chg1d": 2.78,
+   "vol_ratio": 1.53,
+   "upper_shadow": 85.0,
+   "dd60": -23.3,
+   "ext_ema5": -3.7,
    "ema_bull": false,
    "above_ema20": false,
-   "rs5": -5.46,
-   "rs20": -7.76,
+   "rs5": -3.82,
+   "rs20": -5.93,
    "bars": 251,
    "failure_conditions": [
     "数据中心收入环比转负",
@@ -202,7 +189,7 @@
     "GAAP 毛利率跌破 65%（当前约 70-75%）"
    ],
    "notes": [
-    "距60日高点回撤 -25.4% ≥ 触发线 15%"
+    "距60日高点回撤 -23.3% ≥ 触发线 15%"
    ],
    "flags": [
     "放量长上影>50% → 派发信号，不追"
@@ -220,18 +207,18 @@
    "name": "Amazon",
    "type": "mega",
    "cluster": "us_beta",
-   "date": "2026-11-05",
+   "date": "2026-11-06",
    "source": "yfinance",
-   "close": 260.21,
-   "chg1d": -2.19,
-   "vol_ratio": 1.78,
-   "upper_shadow": 62.0,
-   "dd60": -4.8,
-   "ext_ema5": 1.6,
+   "close": 259.3,
+   "chg1d": -0.35,
+   "vol_ratio": 0.88,
+   "upper_shadow": 86.0,
+   "dd60": -5.1,
+   "ext_ema5": 0.9,
    "ema_bull": true,
    "above_ema20": true,
-   "rs5": 16.28,
-   "rs20": 15.87,
+   "rs5": 12.86,
+   "rs20": 11.48,
    "bars": 251,
    "failure_conditions": [
     "AWS 增速跌破 20%（2026Q2: 37%，连续加速）",
@@ -239,36 +226,35 @@
     "经营现金流(TTM) 同比下滑（2026Q2: 增长；FCF 因 capex 转负不算）"
    ],
    "notes": [
-    "SC（抛售高潮）候选 2026-10-30：量比 2.5x，收盘位于振幅 90% 处"
+    "SC（抛售高潮）候选 2026-10-30：量比 2.5x，收盘位于振幅 90% 处",
+    "LPS（最后支撑点）：突破后缩量回踩守住"
    ],
-   "flags": [
-    "放量长上影>50% → 派发信号，不追"
-   ],
-   "state": "S2",
+   "flags": [],
+   "state": "S5",
    "sc_date": "2026-10-30",
    "sc_low": 229.36,
    "sc_high": 241.55,
    "trade": null,
    "prev_state": "S2",
-   "changed": false
+   "changed": true
   },
   {
    "ticker": "GOOGL",
    "name": "Alphabet",
    "type": "mega",
    "cluster": "us_beta",
-   "date": "2026-11-05",
+   "date": "2026-11-06",
    "source": "yfinance",
-   "close": 282.57,
-   "chg1d": -2.2,
-   "vol_ratio": 1.4,
-   "upper_shadow": 70.0,
-   "dd60": -22.4,
-   "ext_ema5": -1.5,
+   "close": 284.78,
+   "chg1d": 0.78,
+   "vol_ratio": 0.93,
+   "upper_shadow": 97.0,
+   "dd60": -21.8,
+   "ext_ema5": -0.5,
    "ema_bull": false,
    "above_ema20": false,
-   "rs5": 9.11,
-   "rs20": -5.42,
+   "rs5": 6.75,
+   "rs20": -6.35,
    "bars": 251,
    "failure_conditions": [
     "搜索收入增速跌破 5%（2026Q2: +17%）",
@@ -276,7 +262,7 @@
     "反垄断判决强制拆分 Search/Android/Chrome 任一"
    ],
    "notes": [
-    "距60日高点回撤 -22.4% ≥ 触发线 12%"
+    "距60日高点回撤 -21.8% ≥ 触发线 12%"
    ],
    "flags": [],
    "state": "S1",
@@ -292,18 +278,18 @@
    "name": "Meta",
    "type": "mega",
    "cluster": "us_beta",
-   "date": "2026-11-05",
+   "date": "2026-11-06",
    "source": "yfinance",
-   "close": 605.08,
-   "chg1d": -3.96,
-   "vol_ratio": 1.14,
-   "upper_shadow": 58.0,
-   "dd60": -22.4,
-   "ext_ema5": -2.0,
+   "close": 610.15,
+   "chg1d": 0.84,
+   "vol_ratio": 0.62,
+   "upper_shadow": 82.0,
+   "dd60": -21.8,
+   "ext_ema5": -0.8,
    "ema_bull": false,
    "above_ema20": false,
-   "rs5": 6.43,
-   "rs20": -2.62,
+   "rs5": 4.19,
+   "rs20": -2.43,
    "bars": 251,
    "failure_conditions": [
     "Family DAP（日活人数）环比下滑（Meta 已停报 DAU）",
@@ -311,7 +297,7 @@
     "Reality Labs 年亏损>250亿 且 总 capex 指引再上调"
    ],
    "notes": [
-    "距60日高点回撤 -22.4% ≥ 触发线 15%"
+    "距60日高点回撤 -21.8% ≥ 触发线 15%"
    ],
    "flags": [],
    "state": "S1",
@@ -327,18 +313,18 @@
    "name": "Tesla",
    "type": "mega",
    "cluster": "us_beta",
-   "date": "2026-11-05",
+   "date": "2026-11-06",
    "source": "yfinance",
-   "close": 343.69,
-   "chg1d": -10.77,
-   "vol_ratio": 1.98,
-   "upper_shadow": 85.0,
-   "dd60": -17.0,
-   "ext_ema5": -9.0,
+   "close": 358.22,
+   "chg1d": 4.23,
+   "vol_ratio": 0.92,
+   "upper_shadow": 35.0,
+   "dd60": -13.5,
+   "ext_ema5": -3.5,
    "ema_bull": false,
    "above_ema20": false,
-   "rs5": -5.23,
-   "rs20": 5.1,
+   "rs5": -5.42,
+   "rs20": 6.27,
    "bars": 251,
    "failure_conditions": [
     "汽车毛利率（不含碳积分）跌破 10%（2025 区间 12-15%，离阈值近）",
@@ -346,9 +332,7 @@
     "Robotaxi/FSD 无监督商业化时间表再次推迟>6个月（估值主要靠此叙事）"
    ],
    "notes": [],
-   "flags": [
-    "放量长上影>50% → 派发信号，不追"
-   ],
+   "flags": [],
    "state": "S0",
    "sc_date": null,
    "sc_low": null,
@@ -362,30 +346,29 @@
    "name": "SpaceX",
    "type": "newlisting",
    "cluster": "us_beta",
-   "date": "2026-11-05",
+   "date": "2026-11-06",
    "source": "yfinance",
-   "close": 123.62,
-   "chg1d": -9.05,
-   "vol_ratio": 1.56,
-   "upper_shadow": 72.0,
-   "dd60": -29.9,
-   "ext_ema5": -7.7,
+   "close": 134.27,
+   "chg1d": 8.62,
+   "vol_ratio": 1.05,
+   "upper_shadow": 16.0,
+   "dd60": -23.9,
+   "ext_ema5": 0.2,
    "ema_bull": false,
    "above_ema20": false,
-   "rs5": -4.54,
-   "rs20": -9.56,
-   "bars": 102,
+   "rs5": 4.65,
+   "rs20": -4.74,
+   "bars": 103,
    "failure_conditions": [
     "Starlink 收入增速跌破 30% 或 用户数环比停滞",
     "锁定期解禁前后10个交易日禁止新开仓（交易纪律，非基本面）",
     "重大发射事故导致 Falcon/Starship 停飞>3个月"
    ],
    "notes": [
-    "距60日高点回撤 -29.9% ≥ 触发线 20%"
+    "距60日高点回撤 -23.9% ≥ 触发线 20%"
    ],
    "flags": [
-    "放量长上影>50% → 派发信号，不追",
-    "次新股：仅 102 根日线，均量基准不稳，阈值未经检验"
+    "次新股：仅 103 根日线，均量基准不稳，阈值未经检验"
    ],
    "state": "S1",
    "sc_date": null,
@@ -400,18 +383,18 @@
    "name": "Circle",
    "type": "newlisting",
    "cluster": "crypto_beta",
-   "date": "2026-11-05",
+   "date": "2026-11-06",
    "source": "yfinance",
-   "close": 69.48,
-   "chg1d": -8.72,
-   "vol_ratio": 1.64,
-   "upper_shadow": 51.0,
-   "dd60": -32.7,
-   "ext_ema5": -6.0,
+   "close": 67.88,
+   "chg1d": -2.3,
+   "vol_ratio": 0.87,
+   "upper_shadow": 42.0,
+   "dd60": -34.3,
+   "ext_ema5": -5.6,
    "ema_bull": false,
    "above_ema20": false,
-   "rs5": -3.59,
-   "rs20": -0.61,
+   "rs5": -1.44,
+   "rs20": -7.01,
    "bars": 251,
    "failure_conditions": [
     "USDC 流通市值 60日内下滑>20%（DefiLlama）",
@@ -419,11 +402,9 @@
     "稳定币立法出现禁止付息/限制发行人的重大不利变化"
    ],
    "notes": [
-    "距60日高点回撤 -32.7% ≥ 触发线 20%"
+    "距60日高点回撤 -34.3% ≥ 触发线 20%"
    ],
-   "flags": [
-    "放量长上影>50% → 派发信号，不追"
-   ],
+   "flags": [],
    "state": "S1",
    "sc_date": null,
    "sc_low": null,
@@ -440,7 +421,7 @@
   "AAPL": "S0",
   "MSFT": "S0",
   "NVDA": "S1",
-  "AMZN": "S2",
+  "AMZN": "S5",
   "GOOGL": "S1",
   "META": "S1",
   "TSLA": "S0",
