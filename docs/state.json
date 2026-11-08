@@ -1,6 +1,6 @@
 {
- "run_utc": "2026-11-07T05:52:28.064370+00:00",
- "run_bjt": "2026-11-07 13:52",
+ "run_utc": "2026-11-08T05:54:44.198829+00:00",
+ "run_bjt": "2026-11-08 13:54",
  "mode": "us",
  "macro": {
   "VIX": {
@@ -235,8 +235,8 @@
    "sc_low": 229.36,
    "sc_high": 241.55,
    "trade": null,
-   "prev_state": "S2",
-   "changed": true
+   "prev_state": "S5",
+   "changed": false
   },
   {
    "ticker": "GOOGL",
