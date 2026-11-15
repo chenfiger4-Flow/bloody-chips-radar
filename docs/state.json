@@ -1,6 +1,6 @@
 {
- "run_utc": "2026-11-14T06:12:00.571866+00:00",
- "run_bjt": "2026-11-14 14:12",
+ "run_utc": "2026-11-15T06:19:48.175159+00:00",
+ "run_bjt": "2026-11-15 14:19",
  "mode": "us",
  "macro": {
   "VIX": {
@@ -96,8 +96,8 @@
    "sc_low": null,
    "sc_high": null,
    "trade": null,
-   "prev_state": "S0",
-   "changed": true
+   "prev_state": "S1",
+   "changed": false
   },
   {
    "ticker": "AAPL",
